@@ -6,7 +6,7 @@ import RecipeList from './components/recipe/RecipeList.vue';
 import SearchBar from './components/searchBar/SearchBar.vue';
 import RecipeForm from './components/recipe/RecipeForm.vue';
 import { useRecipesStore } from './stores/recipes'
-import recipesJSON from './recipes.json';
+import recipesJSON from '../../recipes.json';
 import uocLogo from './assets/uoc-logo.png';
 
 const appName = 'Recipes';
