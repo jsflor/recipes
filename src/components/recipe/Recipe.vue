@@ -1,7 +1,9 @@
 <script setup>
+  import { useRecipesStore } from '../../stores/recipes';
   import deleteSVG from '../../assets/delete-button.svg';
-
-  defineProps({
+  
+  const store = useRecipesStore();
+  const props = defineProps({
     id: String,
     title: String,
     image: String,
@@ -11,8 +13,11 @@
     ingredients: Array,
     directions: Array,
     featured: Boolean,
-    deleteRecipe: Function,
   });
+  
+  function deleteRecipe() {
+    store.deleteRecipe(props.id);
+  }
 </script>
 
 <template>

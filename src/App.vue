@@ -1,27 +1,20 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import RecipeList from './components/recipe/RecipeList.vue';
 import SearchBar from './components/searchBar/SearchBar.vue';
 import RecipeForm from './components/recipe/RecipeForm.vue';
-
+import { useRecipesStore } from './stores/recipes'
 import recipesJSON from './recipes.json';
-
 import uocLogo from './assets/uoc-logo.png';
 
 const appName = 'Recipes';
-const recipes = ref(recipesJSON.data);
 const showModal = ref(false);
+const store = useRecipesStore();
+const {filteredRecipes} = storeToRefs(store);
 
-function addRecipe(newRecipe) {  
-  recipes.value.push(newRecipe);
-}
-
-function deleteRecipe(id) {
-  recipes.value = recipes.value.filter(recipe => recipe.id !== id);
-}
+store.setRecipes(recipesJSON.data);
 
 function toggleModal() {
   showModal.value = !showModal.value;
@@ -41,10 +34,10 @@ function toggleModal() {
       <SearchBar :toggleModal="toggleModal" />
       
       <!-- RECIPE LIST -->
-      <RecipeList :recipe-list="recipes" :deleteRecipe="deleteRecipe" />
+      <RecipeList :recipe-list="filteredRecipes"/>
       
       <!-- RECIPE MODAL FORM -->
-      <RecipeForm v-if="showModal" :addRecipe="addRecipe" :toggleModal="toggleModal" />
+      <RecipeForm v-if="showModal" :toggleModal="toggleModal" />
     </div>
 </template>
 

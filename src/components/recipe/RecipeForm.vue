@@ -1,10 +1,12 @@
 <script setup>
   import { ref } from 'vue';
+  import { useRecipesStore } from '../../stores/recipes';
   import closeSVG from '../../assets/close-button.svg';
+  
+  const store = useRecipesStore();
   
   const props = defineProps({
     toggleModal: Function,
-    addRecipe: Function,
   });
   
   const title = ref('');
@@ -17,11 +19,15 @@
   
   function submitRecipe() { 
     if (isValidated()) {
-      props.addRecipe(createNewRecipe());
+      addRecipe(createNewRecipe());
       props.toggleModal();
     } else {
       console.warn('fill the empty fields');
     }    
+  }
+  
+  function addRecipe(_newRecipe) {
+    store.addRecipe(_newRecipe);
   }
   
   function isValidated() {

@@ -3,7 +3,6 @@
   
   defineProps({
     recipeList: Array,
-    deleteRecipe: Function,
   });
 </script>
 
@@ -19,8 +18,7 @@
       :difficulty="recipe.difficulty"
       :ingredients="recipe.ingredients"
       :directions="recipe.directions"
-      :featured="recipe.featured"
-      :deleteRecipe="() => deleteRecipe(recipe.id)"
+      :featured="recipe.featured"      
     />
   </div>
 </template>

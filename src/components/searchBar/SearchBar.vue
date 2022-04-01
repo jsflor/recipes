@@ -1,12 +1,22 @@
 <script setup>
+  import { storeToRefs } from 'pinia';
+  import { useRecipesStore } from '../../stores/recipes'
+  
+  const store = useRecipesStore();
+  const {filter} = storeToRefs(store);
+  
   defineProps({
     toggleModal: Function,
   });
+  
+  function onChangeFilter(e) {
+    store.setFilter(e.target.value);
+  }
 </script>
 
 <template>
   <div class="search">
-    <input type="text" name="search" placeholder="Search for a recipe">
+    <input :value="filter" @input="onChangeFilter" type="text" name="search" placeholder="Search for a recipe">
     <button @click="toggleModal">Add a new recipe</button>
   </div>
 </template>
