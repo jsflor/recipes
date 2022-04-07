@@ -15,10 +15,6 @@ const store = useRecipesStore();
 const {filteredRecipes} = storeToRefs(store);
 
 store.setRecipes(recipesJSON.data);
-
-function toggleModal() {
-  showModal.value = !showModal.value;
-}
 </script>
 
 <template>
@@ -31,13 +27,13 @@ function toggleModal() {
     <!-- CONTENT -->
     <div class="content">
       <!-- SEARCH BAR -->
-      <SearchBar :toggleModal="toggleModal" />
+      <SearchBar @showModal="() => showModal = true" />
       
       <!-- RECIPE LIST -->
       <RecipeList :recipe-list="filteredRecipes"/>
       
       <!-- RECIPE MODAL FORM -->
-      <RecipeForm v-if="showModal" :toggleModal="toggleModal" />
+      <RecipeForm v-if="showModal" @closeModal="() => showModal = false" />
     </div>
 </template>
 

@@ -5,24 +5,30 @@
   
   const store = useRecipesStore();
   
-  const props = defineProps({
-    toggleModal: Function,
-  });
-  
   const title = ref('');
   const image = ref('');
   const servings = ref('');
   const time = ref('');
   const difficulty = ref('');
   const ingredients = ref('');
-  const directions = ref('');  
+  const directions = ref(''); 
+  const featured = ref('');
+  const error = ref('');
+  
+  const emit = defineEmits(['closeModal']);
+  
+  function closeModal() {
+    emit('closeModal');
+  }
   
   function submitRecipe() { 
     if (isValidated()) {
+      error.value = '';
       addRecipe(createNewRecipe());
-      props.toggleModal();
+      closeModal();
     } else {
       console.warn('fill the empty fields');
+      error.value = 'The fields title, ingredients and directions are required';
     }    
   }
   
@@ -32,8 +38,7 @@
   
   function isValidated() {
     return (
-      title.value.length > 0 && image.value.length > 0 && time.value.length > 0 && servings.value > 0 &&
-      difficulty.value.length > 0 && ingredients.value.length > 0 && directions.value.length > 0
+      title.value.length > 0 && ingredients.value.length > 0 && directions.value.length > 0
     );
   }
   
@@ -51,6 +56,7 @@
       difficulty: difficulty.value,
       ingredients: ingredientsArray,
       directions: directionsArray,
+      featured: featured.value,
     }
   }
   
@@ -66,9 +72,14 @@
       <!-- FORM HEADER -->
       <div class="recipe-form-header">
         <h2>Add a new recipe</h2>
-        <button @click="toggleModal">
+        <button @click="closeModal">
           <img :src="closeSVG" alt="close recipe form modal">
         </button>
+      </div>
+      
+      <!-- ERROR -->
+      <div v-if="error" class="error">
+        {{error}}
       </div>
       
       <!-- FORM -->
@@ -111,13 +122,19 @@
         <!-- INGREDIENTS -->
         <div class="recipe-form-item">
           <label for="ingredients">Ingredients</label>
-          <input id="ingredients" type="text" name="ingredients" v-model="ingredients">
+          <textarea id="ingredients" name="ingredients" v-model="ingredients"></textarea>
         </div>
         
         <!-- DIRECTIONS -->
         <div class="recipe-form-item">
           <label for="directions">Directions</label>
-          <input id="directions" type="text" name="directions" v-model="directions">
+          <textarea id="directions" name="directions" v-model="directions"></textarea>
+        </div>
+        
+         <!-- FEATURED -->
+        <div class="recipe-form-item">
+          <label for="featured">Featured</label>
+          <input id="featured" type="checkbox" name="featured" v-model="featured">
         </div>
         
         <!-- SUBMIT -->
@@ -173,7 +190,8 @@ padding: 0;
  margin-bottom: 5px;
 }
 .recipe-form-item input,
-.recipe-form-item select {
+.recipe-form-item select,
+.recipe-form-item textarea {
  width: 100%;
  padding: 10px;
  border: 1px solid #ccc;
@@ -187,5 +205,9 @@ padding: 0;
  border: none;
  border-radius: 4px;
  cursor: pointer;
+}
+div.error {
+  color: rgb(255, 0, 0);
+  margin-bottom: 5px;
 }
 </style>

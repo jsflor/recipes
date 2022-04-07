@@ -5,19 +5,28 @@
   const store = useRecipesStore();
   const {filter} = storeToRefs(store);
   
-  defineProps({
-    toggleModal: Function,
-  });
+  const emit = defineEmits(['showModal']);
   
-  function onChangeFilter(e) {
+  function showModal() {
+    emit('showModal');
+  }
+  
+  function search(e) {
     store.setFilter(e.target.value);
+  }
+  
+  function clearSearch() {
+    store.setFilter('');
   }
 </script>
 
 <template>
   <div class="search">
-    <input :value="filter" @input="onChangeFilter" type="text" name="search" placeholder="Search for a recipe">
-    <button @click="toggleModal">Add a new recipe</button>
+    <div>
+      <input :value="filter" @input="search" type="text" name="search" placeholder="Search for a recipe">
+      <button class="clear-search" v-if="filter" @click="clearSearch">Clear search</button>
+    </div>
+    <button @click="showModal">Add a new recipe</button>
   </div>
 </template>
 
@@ -30,9 +39,10 @@
  border-bottom: 1px solid #ccc;
  margin-bottom: 25px;
  box-sizing: border-box;
+ justify-content: space-between;
 }
 .search input {
- width: 100%;
+ width: 500px;
  padding: 10px;
  border: 1px solid #ccc;
  border-radius: 4px;
@@ -49,5 +59,8 @@
  cursor: pointer;
  background: #4caf50;
  color: #fff;
+}
+.search button.clear-search {
+  background-color: #4c95af;
 }
 </style>
